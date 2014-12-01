@@ -1,0 +1,35 @@
+!!!
+%html{lang: "en"}
+  %head
+    <link rel="stylesheet" href="./css/app.css" type="text/css" >
+    <script src="./js/jquery.js" type="text/javascript" charset="utf-8"></script>
+
+
+  %body
+    %h1 Command Runner
+    %p
+      Run cmd: #{Runner.instance.cmd}
+
+    %p
+      %input.cmd{type: 'text'}
+
+    %table.result
+
+  :coffee
+    input_cmd = $('input.cmd')
+    table_result = $('.result')
+
+    input_cmd.keypress (e)->
+        return unless e.which == 13
+        e.preventDefault()
+
+        cmd = input_cmd.val()
+        input_cmd.val("")
+
+        cmd = $.trim(cmd)
+        return if cmd == ""
+  
+        $.post '/run', {cmd: cmd}, (data)->
+            table_result.prepend "<tr class='result'><td>"+data.result+"</td></tr>"
+            table_result.prepend("<tr class='cmd'><td>"+cmd+"</td></tr>")
+        
