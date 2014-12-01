@@ -1,2 +1,2 @@
 run:
-	CMD="irb" bundle exec ruby run.rb
+	CMD="ruby runner.rb" bundle exec ruby run.rb

@@ -4,18 +4,25 @@ require 'haml'
 
 require 'json'
 
+require 'open3'
 
 class Runner
   include Singleton
 
   attr_accessor :cmd
 
+  def init(cmd)
+    self.cmd = cmd
+    @stdin, @stdout, @stderr = Open3.popen3(self.cmd)
+  end
+
   def eval(input)
-    "input: #{input}"
+    @stdin.puts(input)
+    @stdout.gets
   end
 end
 
-Runner.instance.cmd = ENV['cmd']
+Runner.instance.init(ENV['CMD'])
 
 get '/' do
   haml :index
